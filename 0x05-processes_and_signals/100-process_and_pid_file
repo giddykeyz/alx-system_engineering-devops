@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Run as root, echos pid into /var/run and traps then runs an infinite loop
+
+echo $$ > /var/run/holbertonscript.pid
+
+trap "echo 'Y U no love me?!'; exit 0; rm /var/run/holbertonscript.pid" SIGINT
+trap "echo 'I hate the kill command'; exit 0; rm /var/run/holbertonscript.pid" SIGTERM
+
+while :; do
+	echo To infinity and beyond
+	sleep 2
+done
