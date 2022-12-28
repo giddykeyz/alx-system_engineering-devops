@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
-# Installs, configures, and starts the load balancer
-sudo apt-get update
-sudo apt-get -y install --no-install-recommends software-properties-common
+# Script that configures HAproxy in a load balancer 
+sudo apt-get -y install software-properties-common
 sudo add-apt-repository ppa:vbernat/haproxy-2.6
+sudo apt-get -y update
 sudo apt-get install haproxy=2.6.\*
-
 # the load balancer's configuration
 DOMAIN_NAME='bardigideon.tech'
 INIT_FILE='/etc/default/haproxy'
 CONFIG_FILE='/etc/haproxy/haproxy.cfg'
 HAPROXY_LB_CONFIG=\
 "
-#--bardigideon.tech-params-begin--
+#--$DOMAIN_NAME-params-begin--
 backend bardigideon.tech-backend
 	balance roundrobin
 	server 54678-web-01 35.174.176.202:80 check
@@ -20,13 +19,13 @@ frontend bardigideon.tech-frontend
 	bind *:80
 	mode http
 	default_backend bardigideon.tech-backend
-#--bardigideon.tech-params-end--
+#--$DOMAIN_NAME-params-end--
 "
 
 [ -f "$INIT_FILE" ] || touch "$INIT_FILE"
 [ -f "$CONFIG_FILE" ] || touch "$CONFIG_FILE"
 
-CONFIG_WORDS=$(grep -Eco "$DOMAIN_NAME-backend" < $CONFIG_FILE)
+CONFIG_WORDS=$(grep -Eco "bardigideon.tech-backend" < $CONFIG_FILE)
 
 if [ "$(grep -Eco '^ENABLED=[01]$' < $INIT_FILE)" -gt 0 ]; then
 	sed -i 's/^ENABLED=0$/ENABLED=1/' "$INIT_FILE"
@@ -52,3 +51,5 @@ if [ "$(pgrep -c haproxy)" -le 0 ]; then
 else
 	service haproxy restart
 fi
+
+sudo service haproxy restart
