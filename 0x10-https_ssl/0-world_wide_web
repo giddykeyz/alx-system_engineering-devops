@@ -1,4 +1,4 @@
- #!/usr/bin/env bash 
+#!/usr/bin/env bash 
  # Configure my domain zone: 
  # www --> 914-lb-01 34.237.76.64 
  # web-01 --> 914-web-01 34.138.32.248 
