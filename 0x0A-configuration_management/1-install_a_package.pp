@@ -1,5 +1,8 @@
-# install puppet-lint -v 2.5.0
+# First, ensure that the python module is installed
+puppet module install puppetlabs/python
 
-exec { 'flask from pip3':
-  command => '/usr/bin/apt-get -y install flask from pip3 -v 2.1.0',
+# Next, use the python::pip to install Flask
+python::pip3 { 'flask':
+  version => '2.1.0',
 }
+
