@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Old code using URI.escape
+url = URI.escape("http://URI.escape?param1=value1&param2=value2")
+
+# New code using URI.encode_www_form_component
+url = URI.encode_www_form_component("http://URI.escape?param1=value1&param2=value2")
+
